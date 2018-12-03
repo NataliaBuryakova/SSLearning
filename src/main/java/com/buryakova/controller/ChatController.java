@@ -27,10 +27,13 @@ public class ChatController {
         if (username == null || username.isEmpty()) {
             return "redirect:/login";
         }
+        ChatMessage chatMessage = new ChatMessage(username, "ВСТУПИЛ В ЧАТ");
+        messages.add(chatMessage);
         User user = new User();
         user.setNicName(username);
         users.add(user);
         model.addAttribute("username", username);
+        model.addAttribute("messages", messages);
         model.addAttribute("users", users);
         model.addAttribute("chatMessage",new ChatMessage());
 
@@ -84,6 +87,17 @@ public class ChatController {
 
     @RequestMapping(path = "/logout")
     public String logout(HttpServletRequest request) {
+        String username = (String)request.getSession().getAttribute("username");
+        ChatMessage chatMessage = new ChatMessage(username, "ПОКИНУЛ ЧАТ");
+        messages.add(chatMessage);
+      for (User user:users)
+        {
+            if (user.getNicName().equals(username)) {
+                users.remove(user);
+                break;
+            }
+            if (users.size()<1)  break;
+        }
         request.getSession(true).invalidate();
 
         return "redirect:/login";

@@ -4,10 +4,7 @@
     <title>Chat version-1 </title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 
-    <!-- https://cdnjs.com/libraries/sockjs-client -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-    <!-- https://cdnjs.com/libraries/stomp.js/ -->
-    <script  src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  
 
 </head>
 <body>
@@ -21,20 +18,44 @@
     </div>
 
     <hr/>
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <caption>Пользователи</caption>
+                <th:block th:each="user : ${users}">
+                    <tr>
+                        <td th:text="${user.nicName}">...</td>
+                    </tr>
 
-    <div id="connecting">Connecting...</div>
-    <ul id="messageArea">
-    </ul>
-    <form id="messageForm" name="messageForm">
-        <div class="input-message">
-            <input type="text" id="message" autocomplete="off"
-                   placeholder="Введите сообщение..."/>
-            <button type="submit">Отправить</button>
-        </div>
+            
+                </th:block>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <caption>Сообщения</caption>
+                    <th:block th:each="message : ${messages}">
+                        <tr>
+                            <td th:text="${message.user}">...</td>
+                            <td th:text="${message.content}">...</td>
+                        </tr>
+                    </th:block>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
+
+    <form action = "setMessage" th:action="@{/setMessage}" th:object="${chatMessage}"  method="POST">
+        <input type="text" th:field="*{content}" />
+
+        <input type="submit" value="submit" />
     </form>
 </div>
 
-<script th:src="@{/js/main.js}"></script>
+
 
 </body>
 </html>
